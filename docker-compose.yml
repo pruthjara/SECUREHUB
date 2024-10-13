@@ -1,7 +1,7 @@
 services:
   frontend:
     build:
-      context: C:\Users\pilar\PROYECTO\syscontrol_front
+      context: C:\Users\pilar\PROYECTO\securehub_front
       dockerfile: Dockerfile
     ports:
       - "3000:3000"  
@@ -14,7 +14,7 @@ services:
   
   backend:
     build:
-      context: C:\Users\pilar\PROYECTO\syscontrol_back
+      context: C:\Users\pilar\PROYECTO\securehub_back
       dockerfile: Dockerfile
     ports:
       - "9000:9000"
