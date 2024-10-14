@@ -7,7 +7,7 @@ REPO_BACKEND = "strast-upm/securehub_backend"
 REPO_FRONTEND = "strast-upm/securehub_frontend"
 TAG = "latest"
 USERNAME = "pruthjara"
-TOKEN = "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"
+TOKEN = "-"
 
 
 def run_command(command, error_message):
