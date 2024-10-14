@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment
+  name: securehubback-deployment
+  namespace: securehub
 spec:
   replicas: 1
   selector:
@@ -14,6 +15,8 @@ spec:
     spec:
       containers:
       - name: backend
-        image: ghcr.io/strast-upm/syscontrol_front:latest
+        image: ghcr.io/strast-upm/securehub_backend:latest
         ports:
         - containerPort: 9000
+      imagePullSecrets:
+      - name: ghcr-secret
