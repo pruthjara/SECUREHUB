@@ -2,11 +2,12 @@ import subprocess
 import os
 import sys
 
-REPO_BACKEND = "strast-upm/syscontrol_back"
-REPO_FRONTEND = "strast-upm/syscontrol_front"
+# Nuevos nombres de las imágenes
+REPO_BACKEND = "strast-upm/securehub_backend"
+REPO_FRONTEND = "strast-upm/securehub_frontend"
 TAG = "latest"
-USERNAME = "pruthjara" 
-TOKEN = "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"   
+USERNAME = "pruthjara"
+TOKEN = "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"
 
 
 def run_command(command, error_message):
@@ -19,10 +20,10 @@ def run_command(command, error_message):
 def remove_old_local_images():
     # Posibles imágenes antiguas
     images_to_remove = [
-        "syscontrol-backend:latest",
-        "syscontrol-frontend:latest",
-        "ghcr.io/strast-upm/syscontrol_back:latest",
-        "ghcr.io/strast-upm/syscontrol_front:latest"
+        "securehub-backend:latest",
+        "securehub-frontend:latest",
+        "ghcr.io/strast-upm/securehub_backend:latest",
+        "ghcr.io/strast-upm/securehub_frontend:latest"
     ]
     
     for image in images_to_remove:
@@ -55,8 +56,8 @@ def main(compose_file_path):
     run_command(build_command, "Error al construir las imágenes con Docker Compose")
 
     # Obtener los IDs de las imágenes recién construidas
-    backend_image_name = "syscontrol-backend"
-    frontend_image_name = "syscontrol-frontend"
+    backend_image_name = "securehub-backend"
+    frontend_image_name = "securehub-frontend"
 
     backend_image_id = get_image_id(backend_image_name)
     frontend_image_id = get_image_id(frontend_image_name)
