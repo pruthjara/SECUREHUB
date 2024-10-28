@@ -1,0 +1,15 @@
+namespace: securehub
+replicas: 1
+imagePullSecrets:
+  - name: ghcr-secret
+backend:
+  image:
+    repository: ghcr.io/strast-upm/securehub_backend
+    tag: latest
+  servicePort: 9000
+frontend:
+  image:
+    repository: ghcr.io/strast-upm/securehub_frontend
+    tag: latest
+  servicePort: 3000
+  backendUrl: "http://backend-service:9000"
