@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: krb5-config
+  namespace: securehub
+data:
+  krb5.conf: |
+    [libdefaults]
+        default_realm = SCRAP.STRAST.ES
+        dns_lookup_realm = false
+        dns_lookup_kdc = true
+        ticket_lifetime = 24h
+        forwardable = true
+
+    [realms]
+        SCRAP.STRAST.ES = {
+            kdc = freeipa.scrap.strast.es
+            admin_server = freeipa.scrap.strast.es
+        }
+
+    [domain_realm]
+        .scrap.strast.es = SCRAP.STRAST.ES
+        scrap.strast.es = SCRAP.STRAST.ES
