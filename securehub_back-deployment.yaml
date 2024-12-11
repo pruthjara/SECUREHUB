@@ -13,10 +13,34 @@ spec:
       labels:
         app: backend
     spec:
+      securityContext:
+        fsGroup: 2000 
       containers:
       - name: backend
         image: ghcr.io/strast-upm/securehub_backend:latest
         ports:
         - containerPort: 9000
+        volumeMounts:
+        - name: keytab-volume
+          mountPath: /etc/admin.keytab
+          subPath: admin.keytab
+        - name: krb5-config-volume
+          mountPath: /etc/krb5.conf
+          subPath: krb5.conf
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "kinit -k -t /etc/admin.keytab newadmin"]
+      volumes:
+      - name: keytab-volume
+        secret:
+          secretName: admin-keytab
+      - name: krb5-config-volume
+        configMap:
+          name: krb5-config
+      hostAliases:
+      - ip: "192.168.2.1"
+        hostnames:
+        - "freeipa.scrap.strast.es"
       imagePullSecrets:
       - name: ghcr-secret
