@@ -100,9 +100,9 @@ Configura los siguientes valores:
   
 Guarda los cambios.
 
-## 5. Configuración de Keycloak con LDAP de FreeIPA
+## 3. Configuración de Keycloak con LDAP de FreeIPA
 
-### 5.1. Añadir FreeIPA como Proveedor de Usuarios
+### 3.1. Añadir FreeIPA como Proveedor de Usuarios
 Ve a Keycloak → Proveedores de Usuarios.
 
 Haz clic en Agregar Proveedor y elige LDAP.
@@ -116,7 +116,7 @@ Configura:
 - Modo de sincronización: PERIODIC
   
 Guarda y haz clic en Sincronizar Usuarios.
-### 5.2. Configurar Atributos de Usuario
+### 3.2. Configurar Atributos de Usuario
 En el proveedor LDAP, ve a Mappers.
 
 Agrega:
@@ -125,7 +125,7 @@ Agrega:
 - cn → full name
   
 Guarda los cambios.
-### 5.3. Habilitar Inicio de Sesión con LDAP
+### 3.3. Habilitar Inicio de Sesión con LDAP
 Ve a Autenticación → Flows.
 
 Edita el flujo de autenticación e inserta LDAP Login.
