@@ -90,37 +90,46 @@ Guarda los cambios y en la pestaña Credenciales, copia el client-secret.
 ### 2.2. Crear un Cliente para el Frontend
 
 Accede a Clientes → Crear Cliente.
+
 Configura los siguientes valores:
-ID del Cliente: securehub-frontend
-Tipo de Acceso: Public
-Root URL: http://frontend-service:3000
-Valid Redirect URIs: http://frontend-service:3000/*
-Web Origins: http://frontend-service:3000
+- ID del Cliente: securehub-frontend
+- Tipo de Acceso: Public
+- Root URL: http://frontend-service:3000
+- Valid Redirect URIs: http://frontend-service:3000/*
+- Web Origins: http://frontend-service:3000
+  
 Guarda los cambios.
 
 ## 5. Configuración de Keycloak con LDAP de FreeIPA
 
 ### 5.1. Añadir FreeIPA como Proveedor de Usuarios
 Ve a Keycloak → Proveedores de Usuarios.
+
 Haz clic en Agregar Proveedor y elige LDAP.
+
 Configura:
-Nombre: freeipa-ldap
-Ednpoint LDAP: ldap://freeipa-service:389
-DN Base: dc=securehub,dc=com
-DN de Administración: uid=admin,cn=users,cn=accounts,dc=securehub,dc=com
-Contraseña: (la de FreeIPA)
-Modo de sincronización: PERIODIC
+- Nombre: freeipa-ldap
+- Ednpoint LDAP: ldap://freeipa-service:389
+- DN Base: dc=securehub,dc=com
+- DN de Administración: uid=admin,cn=users,cn=accounts,dc=securehub,dc=com
+- Contraseña: (la de FreeIPA)
+- Modo de sincronización: PERIODIC
+  
 Guarda y haz clic en Sincronizar Usuarios.
 ### 5.2. Configurar Atributos de Usuario
 En el proveedor LDAP, ve a Mappers.
+
 Agrega:
-uid → username
-mail → email
-cn → full name
+- uid → username
+- mail → email
+- cn → full name
+  
 Guarda los cambios.
 ### 5.3. Habilitar Inicio de Sesión con LDAP
 Ve a Autenticación → Flows.
+
 Edita el flujo de autenticación e inserta LDAP Login.
+
 Prueba iniciar sesión con un usuario de FreeIPA.
 
 
