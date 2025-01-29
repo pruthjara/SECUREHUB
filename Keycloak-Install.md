@@ -78,7 +78,9 @@ Contraseña: admin123
 
 ### 2.1. Crear un Cliente para el Backend
 Accede a Keycloak y entra en el Realm "master" (o crea un nuevo realm si prefieres).
+
 Ve a Clientes → Crear Cliente.
+
 Configura los siguientes valores:
 ID del Cliente: securehub-backend
 Tipo de Acceso: Confidential
