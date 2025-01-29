@@ -82,9 +82,10 @@ Accede a Keycloak y entra en el Realm "master" (o crea un nuevo realm si prefier
 Ve a Clientes → Crear Cliente.
 
 Configura los siguientes valores:
-ID del Cliente: securehub-backend
-Tipo de Acceso: Confidential
-Root URL: http://backend-service:9000
+- ID del Cliente: securehub-backend
+- Tipo de Acceso: Confidential
+- Root URL: http://backend-service:9000
+
 Guarda los cambios y en la pestaña Credenciales, copia el client-secret.
 ### 2.2. Crear un Cliente para el Frontend
 
