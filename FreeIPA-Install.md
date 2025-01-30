@@ -115,7 +115,7 @@ sudo virt-install \
   --vcpus 2 \
   --disk path=/var/lib/libvirt/images/freeipa-fedora-server-kvm-41.qcow2,format=qcow2,bus=virtio \
   --os-variant fedora-unknown \
-  --network bridge=bridge-general,model=virtio,mac=52:54:00:00:00:00 \
+  --network network=default,model=virtio \
   --graphics none \
   --console pty,target_type=serial \
   --import
