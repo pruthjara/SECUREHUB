@@ -87,14 +87,26 @@ network:
     version: 2
     ethernets:
         eno1:
-            dhcp4: false  # Se desactiva DHCP en eno1 porque el bridge lo manejará
-        eno2:
-            dhcp4: true
+            dhcp4: false
+    vlans:
+        eno1.559:
+            id: 559
+            link: eno1
+            dhcp4: true  # Mantener DHCP en eno1.559 para evitar pérdida de conexión
     bridges:
         br0:
             interfaces:
-                - eno1
-            dhcp4: yes  # Se habilita DHCP en el bridge para obtener IP
+                - eno1.559
+            addresses:
+                - 138.4.11.152/25
+            routes:
+                - to: default
+                  via: 138.4.11.131
+            nameservers:
+                addresses:
+                    - 8.8.8.8
+                    - 8.8.4.4
+            dhcp4: false  # No usar DHCP en br0 porque ya estamos asignando IP manualmente
 ```
 
 #### 1.5.3 Aplica los cambios de netplan para que la configuración tome efecto
