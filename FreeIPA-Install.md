@@ -84,16 +84,17 @@ sudo nano /etc/netplan/<archivo>
 
 ```bash
 network:
-  version: 2
-  ethernets:
-    eno1:
-      dhcp4: false
-  bridges:
-    bridge-general:
-      interfaces:
-        - eno1
-      dhcp4: yes
-      macaddress: F0:1F:AF:26:29:65
+    version: 2
+    ethernets:
+        eno1:
+            dhcp4: false  # Se desactiva DHCP en eno1 porque el bridge lo manejará
+        eno2:
+            dhcp4: true
+    bridges:
+        br0:
+            interfaces:
+                - eno1
+            dhcp4: yes  # Se habilita DHCP en el bridge para obtener IP
 ```
 
 #### 1.5.3 Aplica los cambios de netplan para que la configuración tome efecto
