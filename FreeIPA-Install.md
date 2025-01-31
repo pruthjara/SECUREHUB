@@ -70,50 +70,9 @@ Para restaurar el backup puede utilizar
 sudo cp freeipa-fedora-server-kvm-41-backup.qcow2 /var/lib/libvirt/images/freeipa-fedora-server-kvm-41.qcow2 
 ```
 
-### 1.5 Configuración de la Red Bridge
+### 1.5 Configuración de la red
 
-Para permitir que la máquina virtual tenga conectividad de red, configura una interfaz de red bridge mediante `netplan`.
-
-#### 1.5.1 Abre el archivo de configuración de `netplan` con el siguiente comando (reemplaza `<archivo>` por el nombre del archivo en `/etc/netplan`)
-
-```bash
-sudo nano /etc/netplan/<archivo>
-```
-
-#### 1.5.2 Añade la configuración de la red bridge
-
-```bash
-network:
-    version: 2
-    ethernets:
-        eno1:
-            dhcp4: false
-    vlans:
-        eno1.559:
-            id: 559
-            link: eno1
-            dhcp4: true  # Mantener DHCP en eno1.559 para evitar pérdida de conexión
-    bridges:
-        br0:
-            interfaces:
-                - eno1.559
-            addresses:
-                - 138.4.11.152/25
-            routes:
-                - to: default
-                  via: 138.4.11.131
-            nameservers:
-                addresses:
-                    - 8.8.8.8
-                    - 8.8.4.4
-            dhcp4: false  # No usar DHCP en br0 porque ya estamos asignando IP manualmente
-```
-
-#### 1.5.3 Aplica los cambios de netplan para que la configuración tome efecto
-
-```bash
-sudo netplan apply
-```
+En la configuracion inicial de Fedora hay que indicar que se le asigne IPV4 mediante dhcp4
 
 ### 1.6 Despliegue Definitivo con virt-install
 
