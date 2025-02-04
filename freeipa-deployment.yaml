@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freeipa
+  namespace: securehub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: freeipa
+  template:
+    metadata:
+      labels:
+        app: freeipa
+    spec:
+      containers:
+        - name: freeipa
+          image: freeipa/freeipa-server:rocky-9  
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 389
+            - containerPort: 636
+            - containerPort: 88
+            - containerPort: 464
+          env:
+            - name: IPA_SERVER_HOSTNAME
+              value: "freeipa.freeipa.andion.eu"
+            - name: IPA_SERVER_DOMAIN
+              value: "freeipa.andion.eu"
+            - name: IPA_SERVER_REALM
+              value: "FREEIPA.ANDION.EU"
+            - name: IPA_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: freeipa-secret
+                  key: admin-password
+          volumeMounts:
+            - name: freeipa-data
+              mountPath: /data
+      volumes:
+        - name: freeipa-data
+          persistentVolumeClaim:
+            claimName: freeipa-pvc
