@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: freeipa
+    name: freeipa
   namespace: securehub
 spec:
   replicas: 1
@@ -13,32 +13,73 @@ spec:
       labels:
         app: freeipa
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
-        - name: freeipa
-          image: freeipa/freeipa-server:rocky-9  
-          ports:
-            - containerPort: 80
-            - containerPort: 443
-            - containerPort: 389
-            - containerPort: 636
-            - containerPort: 88
-            - containerPort: 464
-          env:
-            - name: IPA_SERVER_HOSTNAME
-              value: "freeipa.freeipa.andion.eu"
-            - name: IPA_SERVER_DOMAIN
-              value: "freeipa.andion.eu"
-            - name: IPA_SERVER_REALM
-              value: "FREEIPA.ANDION.EU"
-            - name: IPA_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: freeipa-secret
-                  key: admin-password
-          volumeMounts:
-            - name: freeipa-data
-              mountPath: /data
+      - name: freeipa
+        image: freeipa/freeipa-server:rocky-9
+        securityContext:
+          privileged: true  # FreeIPA necesita acceso a ciertas configuraciones
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo "Corrigiendo el hostname dentro del contenedor..."
+            hostname freeipa.andion.eu
+
+            echo "Corrigiendo /etc/hosts..."
+            grep -v "$POD_IP" /etc/hosts > /tmp/hosts
+            echo "$POD_IP freeipa.andion.eu" >> /tmp/hosts
+            cat /tmp/hosts > /etc/hosts
+            cat /etc/hosts
+            if [ ! -f /data/ipa-server.lock ]; then
+              echo "Instalando FreeIPA..."
+              ipa-server-install --unattended \
+                --skip-mem-check \
+                --no-ntp \
+                --realm=ANDION.EU \
+                --domain=andion.eu \
+                --hostname=freeipa.andion.eu \
+                --ip-address=$POD_IP \
+                --ds-password=SuperSecurePassword \
+                --admin-password=AdminSuperSecurePassword
+              touch /data/ipa-server.lock
+            fi
+            echo "Iniciando FreeIPA..."
+            exec /usr/sbin/init
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: IPA_SERVER_HOSTNAME
+          value: "freeipa.andion.eu"
+        - name: IPA_REALM
+          value: "ANDION.EU"
+        - name: IPA_DOMAIN
+          value: "andion.eu"
+        - name: MEMORY_LIMIT  # Se añade para evitar error de RAM
+          value: "2048"
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        - containerPort: 389
+        - containerPort: 636
+        - containerPort: 88
+        - containerPort: 464
+        volumeMounts:
+        - name: freeipa-storage
+          mountPath: "/var/lib/ipa"
+        - name: freeipa-config
+          mountPath: "/etc/ipa"
+        - name: freeipa-logs
+          mountPath: "/var/log/ipa"
       volumes:
-        - name: freeipa-data
-          persistentVolumeClaim:
-            claimName: freeipa-pvc
+      - name: freeipa-storage
+        persistentVolumeClaim:
+          claimName: freeipa-pvc
+      - name: freeipa-config
+        persistentVolumeClaim:
+          claimName: freeipa-config-pvc
+      - name: freeipa-logs
+        persistentVolumeClaim:
+          claimName: freeipa-logs-pvc
