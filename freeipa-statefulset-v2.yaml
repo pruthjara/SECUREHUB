@@ -39,10 +39,10 @@ spec:
               mountPath: /tmp
               subPath: startup.sh
             - name: ipa-options
-              mountPath: /tmp/ipa-server-install-options
+              mountPath: /tmp/ipa-server-options
               subPath: ipa-server-options
             - name: ipa-options
-              mountPath: /tmp/ipa-replica-install-options
+              mountPath: /tmp/ipa-replica-options
               subPath: ipa-replica-options
       containers:
         - name: freeipa
