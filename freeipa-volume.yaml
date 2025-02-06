@@ -9,5 +9,30 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: manual
-
+  volumeName: freeipa-pv2  # Se enlaza al PV específico
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: freeipa-config-pvc
+  namespace: securehub
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: freeipa-config-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: freeipa-logs-pvc
+  namespace: securehub
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: freeipa-logs-pv
