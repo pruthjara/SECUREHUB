@@ -36,7 +36,7 @@ spec:
             - name: freeipa-pvc 
               mountPath: /data
             - name: ipa-options
-              mountPath: /tmp/startup.sh
+              mountPath: /tmp
               subPath: startup.sh
             - name: ipa-options
               mountPath: /tmp/ipa-server-install-options
