@@ -1,14 +1,15 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: freeipa
+  name: freeipa-server
   namespace: securehub
 spec:
-  serviceName: freeipa-service
-  replicas: 1
   selector:
     matchLabels:
       app: freeipa
+  serviceName: "freeipa"
+  replicas: 1
+  minReadySeconds: 10
   template:
     metadata:
       labels:
@@ -32,8 +33,17 @@ spec:
             - sh
             - /tmp/startup.sh
           volumeMounts:
-            - name: freeipa-data
+            - name: freeipa-pvc 
               mountPath: /data
+            - name: ipa-options
+              mountPath: /tmp/startup.sh
+              subPath: startup.sh
+            - name: ipa-options
+              mountPath: /tmp/ipa-server-install-options
+              subPath: ipa-server-options
+            - name: ipa-options
+              mountPath: /tmp/ipa-replica-install-options
+              subPath: ipa-replica-options
       containers:
         - name: freeipa
           image: quay.io/freeipa/freeipa-server:fedora-41-4.12.2
@@ -51,6 +61,7 @@ spec:
             httpGet:
               path: /
               port: 80
+            # NOTE: if initial installation fails, try increasing this value:
             failureThreshold: 50
             periodSeconds: 30
           args: ['ipa-server-install']
@@ -68,7 +79,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: freeipa-secret
-                  key: directory_password
+                  key: directory-password
           securityContext:
             seccompProfile:
               type: Unconfined
@@ -78,28 +89,25 @@ spec:
           stdin: true
           tty: true
           ports:
-            - containerPort: 53   # DNS
-            - containerPort: 53   # DNS UDP
+            - containerPort: 53 # dns
+            - containerPort: 53 # dns
               protocol: UDP
-            - containerPort: 80   # HTTP
-            - containerPort: 88   # Kerberos
-            - containerPort: 88   # Kerberos UDP
+            - containerPort: 80 # http
+            - containerPort: 88 # kerberos
+            - containerPort: 88 # kerberos
               protocol: UDP
-            - containerPort: 123  # NTP
+            - containerPort: 123 # ntp
+            - containerPort: 123 # ntp
               protocol: UDP
-            - containerPort: 389  # LDAP
-            - containerPort: 443  # HTTPS
-            - containerPort: 464  # kpasswd
-            - containerPort: 464  # kpasswd UDP
+            - containerPort: 389 # ldap
+            - containerPort: 443 # https
+            - containerPort: 464 # kpasswd
+            - containerPort: 464 # kpasswd
               protocol: UDP
-            - containerPort: 636  # LDAPS
+            - containerPort: 636 # ldaps
           volumeMounts:
-            - name: freeipa-data
-              mountPath: "/data/var/lib/ipa"
-            - name: freeipa-config
-              mountPath: "/etc/ipa"
-            - name: freeipa-logs
-              mountPath: "/var/log/ipa"
+            - name: freeipa-pvc
+              mountPath: /data
             - name: cgroups
               mountPath: /sys/fs/cgroup
             - name: run
@@ -108,16 +116,11 @@ spec:
               mountPath: /run/systemd
             - name: tmp
               mountPath: /tmp
+      hostname: freeipa.andion.eu
       volumes:
-        - name: freeipa-data
+        - name: freeipa-pvc
           persistentVolumeClaim:
             claimName: freeipa-pvc
-        - name: freeipa-config
-          persistentVolumeClaim:
-            claimName: freeipa-config-pvc
-        - name: freeipa-logs
-          persistentVolumeClaim:
-            claimName: freeipa-logs-pvc
         - name: cgroups
           hostPath:
             path: /sys/fs/cgroup
@@ -127,6 +130,9 @@ spec:
         - name: run-systemd
           emptyDir:
             medium: Memory
+        - name: ipa-options
+          configMap:
+            name: ipa-install-options
         - name: tmp
           emptyDir:
             medium: Memory
