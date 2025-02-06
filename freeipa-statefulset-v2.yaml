@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: freeipa
+  namespace: securehub
+spec:
+  serviceName: freeipa-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: freeipa
+  template:
+    metadata:
+      labels:
+        app: freeipa
+    spec:
+      terminationGracePeriodSeconds: 10
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - freeipa
+            topologyKey: "kubernetes.io/hostname"
+      initContainers:
+        - name: init
+          image: quay.io/freeipa/freeipa-server:fedora-41-4.12.2
+          command:
+            - sh
+            - /tmp/startup.sh
+          volumeMounts:
+            - name: freeipa-data
+              mountPath: /data
+      containers:
+        - name: freeipa
+          image: quay.io/freeipa/freeipa-server:fedora-41-4.12.2
+          readinessProbe:
+            exec:
+              command: ["/usr/bin/systemctl", "is-active", "--quiet", "ipa"]
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            failureThreshold: 5
+          startupProbe:
+            httpGet:
+              path: /
+              port: 80
+            failureThreshold: 50
+            periodSeconds: 30
+          args: ['ipa-server-install']
+          env:
+            - name: TZ
+              value: "Europe/Madrid"
+            - name: IPA_SERVER_HOSTNAME
+              value: "freeipa.andion.eu"
+            - name: IPA_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: freeipa-secret
+                  key: admin-password
+            - name: IPA_DIRECTORY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: freeipa-secret
+                  key: directory_password
+          securityContext:
+            seccompProfile:
+              type: Unconfined
+            capabilities:
+              add:
+                - SYS_TIME
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 53   # DNS
+            - containerPort: 53   # DNS UDP
+              protocol: UDP
+            - containerPort: 80   # HTTP
+            - containerPort: 88   # Kerberos
+            - containerPort: 88   # Kerberos UDP
+              protocol: UDP
+            - containerPort: 123  # NTP
+              protocol: UDP
+            - containerPort: 389  # LDAP
+            - containerPort: 443  # HTTPS
+            - containerPort: 464  # kpasswd
+            - containerPort: 464  # kpasswd UDP
+              protocol: UDP
+            - containerPort: 636  # LDAPS
+          volumeMounts:
+            - name: freeipa-data
+              mountPath: "/data/var/lib/ipa"
+            - name: freeipa-config
+              mountPath: "/etc/ipa"
+            - name: freeipa-logs
+              mountPath: "/var/log/ipa"
+            - name: cgroups
+              mountPath: /sys/fs/cgroup
+            - name: run
+              mountPath: /run
+            - name: run-systemd
+              mountPath: /run/systemd
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: freeipa-data
+          persistentVolumeClaim:
+            claimName: freeipa-pvc
+        - name: freeipa-config
+          persistentVolumeClaim:
+            claimName: freeipa-config-pvc
+        - name: freeipa-logs
+          persistentVolumeClaim:
+            claimName: freeipa-logs-pvc
+        - name: cgroups
+          hostPath:
+            path: /sys/fs/cgroup
+        - name: run
+          emptyDir:
+            medium: Memory
+        - name: run-systemd
+          emptyDir:
+            medium: Memory
+        - name: tmp
+          emptyDir:
+            medium: Memory
