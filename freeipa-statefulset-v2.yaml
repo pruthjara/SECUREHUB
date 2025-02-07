@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: freeipa-server
+  name: freeipa
   namespace: securehub
 spec:
+  serviceName: freeipa-service
+  replicas: 1
   selector:
     matchLabels:
       app: freeipa
-  serviceName: "freeipa"
-  replicas: 1
-  minReadySeconds: 10
   template:
     metadata:
       labels:
         app: freeipa
     spec:
+      hostname: freeipa.andion.eu
+      subdomain: freeipa-service
       terminationGracePeriodSeconds: 10
       affinity:
         podAntiAffinity:
@@ -26,6 +27,11 @@ spec:
                 values:
                 - freeipa
             topologyKey: "kubernetes.io/hostname"
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - freeipa.andion.eu
+            - freeipa-0.freeipa-service.securehub.svc.cluster.local
       initContainers:
         - name: init
           image: quay.io/freeipa/freeipa-server:fedora-41-4.12.2
@@ -33,38 +39,34 @@ spec:
             - sh
             - /tmp/startup.sh
           volumeMounts:
-            - name: freeipa-pvc 
+            - name: freeipa-data
               mountPath: /data
             - name: ipa-options
-              mountPath: /tmp
+              mountPath: /tmp/startup.sh
               subPath: startup.sh
             - name: ipa-options
               mountPath: /tmp/ipa-server-options
               subPath: ipa-server-options
-            - name: ipa-options
-              mountPath: /tmp/ipa-replica-options
-              subPath: ipa-replica-options
       containers:
         - name: freeipa
           image: quay.io/freeipa/freeipa-server:fedora-41-4.12.2
-          readinessProbe:
-            exec:
-              command: ["/usr/bin/systemctl", "is-active", "--quiet", "ipa"]
-            successThreshold: 1
-            failureThreshold: 3
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 80
-            failureThreshold: 5
-          startupProbe:
-            httpGet:
-              path: /
-              port: 80
-            # NOTE: if initial installation fails, try increasing this value:
-            failureThreshold: 50
-            periodSeconds: 30
-          args: ['ipa-server-install']
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Ejecutando script de corrección del hostname..."
+              sh /usr/local/bin/fix-hostname.sh
+              echo "Iniciando instalación de FreeIPA..."
+              ipa-server-install --unattended \
+                --realm=ANDION.EU \
+                --domain=andion.eu \
+                --ds-password=$(IPA_DIRECTORY_PASSWORD) \
+                --admin-password=$(IPA_ADMIN_PASSWORD) \
+                --hostname=freeipa.andion.eu \
+                --no-host-dns \
+                --setup-dns \
+                --forwarder=8.8.8.8 \
+                --allow-zone-overlap \
+                --skip-mem-check
           env:
             - name: TZ
               value: "Europe/Madrid"
@@ -81,49 +83,38 @@ spec:
                   name: freeipa-secret
                   key: directory-password
           securityContext:
+            privileged: true  # Necesario para systemd y cgroups
             seccompProfile:
-              type: Unconfined
+              type: Unconfined  # systemd necesita permisos completos
             capabilities:
               add:
+                - SYS_ADMIN
                 - SYS_TIME
           stdin: true
           tty: true
-          ports:
-            - containerPort: 53 # dns
-            - containerPort: 53 # dns
-              protocol: UDP
-            - containerPort: 80 # http
-            - containerPort: 88 # kerberos
-            - containerPort: 88 # kerberos
-              protocol: UDP
-            - containerPort: 123 # ntp
-            - containerPort: 123 # ntp
-              protocol: UDP
-            - containerPort: 389 # ldap
-            - containerPort: 443 # https
-            - containerPort: 464 # kpasswd
-            - containerPort: 464 # kpasswd
-              protocol: UDP
-            - containerPort: 636 # ldaps
           volumeMounts:
-            - name: freeipa-pvc
+            - name: fix-hostname-script
+              mountPath: /usr/local/bin/fix-hostname.sh
+              subPath: fix-hostname.sh
+            - name: freeipa-data
               mountPath: /data
-            - name: cgroups
-              mountPath: /sys/fs/cgroup
             - name: run
               mountPath: /run
             - name: run-systemd
               mountPath: /run/systemd
             - name: tmp
               mountPath: /tmp
-      hostname: freeipa.andion.eu
+            - name: cgroups
+              mountPath: /sys/fs/cgroup
+            - name: log-journal
+              mountPath: /var/log/journal
       volumes:
-        - name: freeipa-pvc
+        - name: fix-hostname-script
+          configMap:
+            name: ipa-fix-hostname
+        - name: freeipa-data
           persistentVolumeClaim:
             claimName: freeipa-pvc
-        - name: cgroups
-          hostPath:
-            path: /sys/fs/cgroup
         - name: run
           emptyDir:
             medium: Memory
@@ -136,3 +127,10 @@ spec:
         - name: tmp
           emptyDir:
             medium: Memory
+        - name: cgroups
+          hostPath:  # Usa hostPath para cgroups
+            path: /sys/fs/cgroup
+            type: Directory
+        - name: log-journal
+          emptyDir: {}
+
