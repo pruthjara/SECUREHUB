@@ -42,6 +42,9 @@ kind: Service
 metadata:
   name: keycloak-service
   namespace: securehub
+  annotations:
+    metallb.universe.tf/address-pool: "primary"
+    metallb.universe.tf/allow-shared-ip: "true"
 spec:
   selector:
     app: keycloak
