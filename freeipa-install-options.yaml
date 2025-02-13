@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: freeipa-install-options
+  namespace: securehub
+data:
+  startup.sh: |
+    #!/bin/sh
+    echo "Ejecutando startup script..."
+    exit 0
+  ipa-server-options: |
+    --realm=ANDION.EU
+    --domain=andion.eu
+    --admin-password=SecurePassword123
+    --ds-password=SecurePassword123
+    --setup-dns
+    --skip-mem-check
+    --skip-version-check
+    --unattended
