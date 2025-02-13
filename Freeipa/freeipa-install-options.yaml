@@ -23,7 +23,7 @@ data:
         --domain=${IPA_DOMAIN} \
         --admin-password=${IPA_ADMIN_PASSWORD} \
         --ds-password=${IPA_DIRECTORY_PASSWORD} \
-        --setup-dns \
+        --no-dns \
         --skip-mem-check \
         --no-forwarders \
         --unattended \
