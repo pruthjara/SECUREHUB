@@ -36,6 +36,25 @@ spec:
           command:
             - sh
             - /tmp/startup.sh
+          env:
+            - name: TZ
+              value: "Europe/Madrid"
+            - name: IPA_REALM
+              value: ANDION.EU
+            - name: IPA_DOMAIN
+              value: andion.eu
+            - name: IPA_SERVER_HOSTNAME
+              value: "freeipa.andion.eu"
+            - name: IPA_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: freeipa-secret
+                  key: admin-password
+            - name: IPA_DIRECTORY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: freeipa-secret
+                  key: directory-password
           volumeMounts:
             - name: ipa-data
               mountPath: /data
@@ -64,7 +83,8 @@ spec:
               port: 80
             failureThreshold: 50
             periodSeconds: 30
-          args: ['ipa-server-install', '-U']
+          args:
+              - ipa-server-install
           env:
             - name: TZ
               value: "Europe/Madrid"
@@ -117,7 +137,7 @@ spec:
             - name: run-systemd
               mountPath: /run/systemd
             - name: tmp
-              mountPath: /tmp
+              mountPath: /var/libexec/ipa
       hostname: freeipa.andion.eu
       volumes:
         - name: ipa-data
@@ -136,5 +156,5 @@ spec:
           emptyDir:
             medium: Memory
         - name: tmp
-          emptyDir:
-            medium: Memory
+          emptyDir: {}
+
