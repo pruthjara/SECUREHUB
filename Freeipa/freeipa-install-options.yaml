@@ -6,14 +6,38 @@ metadata:
 data:
   startup.sh: |
     #!/bin/sh
-    echo "Ejecutando startup script..."
+    set -e  # Detener el script si hay algún error
+
+    echo " Ejecutando startup.sh para FreeIPA..."
+
+    # Verificar si FreeIPA ya está instalado
+    if [ -f "/data/ipa-server/sysrestore/sysrestore.state" ]; then
+        echo " FreeIPA ya está instalado. Omitiendo instalación."
+        exit 0
+    fi
+
+    echo " Instalando FreeIPA..."
+
+    exec ipa-server-install -U \
+        --realm=${IPA_REALM} \
+        --domain=${IPA_DOMAIN} \
+        --admin-password=${IPA_ADMIN_PASSWORD} \
+        --ds-password=${IPA_DIRECTORY_PASSWORD} \
+        --setup-dns \
+        --skip-mem-check \
+        --no-forwarders \
+        --unattended \
+        --force
+
+    echo " Instalación completada con éxito."
     exit 0
+
   ipa-server-options: |
     --realm=ANDION.EU
     --domain=andion.eu
-    --admin-password=SecurePassword123
-    --ds-password=SecurePassword123
+    --admin-password={{ IPA_ADMIN_PASSWORD }}
+    --ds-password={{ IPA_DIRECTORY_PASSWORD }}
     --setup-dns
     --skip-mem-check
-    --skip-version-check
     --unattended
+    --force
