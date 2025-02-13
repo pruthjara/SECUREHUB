@@ -23,11 +23,10 @@ data:
         --domain=${IPA_DOMAIN} \
         --admin-password=${IPA_ADMIN_PASSWORD} \
         --ds-password=${IPA_DIRECTORY_PASSWORD} \
-        --no-dns \
         --skip-mem-check \
-        --no-forwarders \
         --unattended \
-        --force
+        --force \
+        --no-ntp
 
     echo " Instalación completada con éxito."
     exit 0
