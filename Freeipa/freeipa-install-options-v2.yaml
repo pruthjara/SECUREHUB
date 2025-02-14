@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: freeipa-install-options
+  namespace: securehub
+data:
+  startup.sh: |
+    #!/bin/sh
+    set -e  # Detener el script si hay algún error
+
+    echo " Ejecutando startup.sh para FreeIPA..."
+    echo "📂 Copiando opciones de instalación..."
+    cp /tmp/ipa-server-options /data/ipa-server-options
+    chmod +x /data/ipa-server-options
+
+    # Verificar si FreeIPA ya está instalado
+    if [ -f "/data/ipa-server/sysrestore/sysrestore.state" ]; then
+        echo " FreeIPA ya está instalado. Omitiendo instalación."
+        exit 0
+    fi
+
+    echo " Instalando FreeIPA..."
+
+    exec ipa-server-install -U \
+        --realm=${IPA_REALM} \
+        --domain=${IPA_DOMAIN} \
+        --admin-password=${IPA_ADMIN_PASSWORD} \
+        --ds-password=${IPA_DIRECTORY_PASSWORD} \
+        --skip-mem-check \
+        --unattended \
+        --force \
+        --no-ntp
+
+    echo " Instalación completada con éxito."
+    exit 0
+
+  ipa-server-options: |
+    --realm=ANDION.EU
+    --domain=andion.eu
+    --admin-password={{ IPA_ADMIN_PASSWORD }}
+    --ds-password={{ IPA_DIRECTORY_PASSWORD }}
+    --setup-dns
+    --skip-mem-check
+    --unattended
+    --force
