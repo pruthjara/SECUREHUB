@@ -9,7 +9,7 @@ data:
     set -e  # Detener el script si hay algún error
 
     echo " Ejecutando startup.sh para FreeIPA..."
-    echo "📂 Copiando opciones de instalación..."
+    echo "Copiando opciones de instalación..."
     cp /tmp/ipa-server-options /data/ipa-server-options
     chmod +x /data/ipa-server-options
 
