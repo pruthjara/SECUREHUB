@@ -1,33 +1,68 @@
 # SecureHub Deployment Repository
 
-Este repositorio contiene los archivos necesarios para desplegar la aplicación **SecureHub** en un entorno Kubernetes, utilizando Helm para gestionar el despliegue. La aplicación se compone de un **frontend** y un **backend**, cada uno con su propia configuración de despliegue y servicio.
+Este repositorio contiene los archivos necesarios para desplegar la aplicación SecureHub en un entorno Kubernetes. La aplicación se compone de varios componentes clave: backend, frontend, FreeIPA y Keycloak, cada uno con su propia configuración de despliegue y servicio.
 
 ## Estructura de Archivos
 
-- **Helm chart for deployment**  
-  Carpeta que contiene el chart de Helm para gestionar el despliegue de la aplicación en Kubernetes, facilitando la instalación, actualización y configuración de los recursos de manera controlada.
-  
-- **securehubback-deployment.yaml**  
-  Archivo de configuración para el despliegue del **backend** de SecureHub. Define las especificaciones de recursos, réplicas, imagen Docker y variables de entorno del backend en Kubernetes.
+- **Backend/**  
+  Contiene los archivos de configuración y despliegue del backend de SecureHub.
 
-- **securehubback-service.yaml**  
-  Archivo de configuración del **servicio** asociado al backend de SecureHub, que expone el backend dentro del clúster de Kubernetes y le permite comunicarse con otros servicios (como el frontend).
+- **Frontend/**  
+  Contiene los archivos de configuración y despliegue del frontend de SecureHub.
 
-- **securehubfront-deployment.yaml**  
-  Archivo de configuración para el despliegue del **frontend** de SecureHub. Similar al backend, define las especificaciones de recursos, imagen Docker y variables de entorno, y se asegura de que el frontend esté configurado correctamente para conectarse al backend.
+- **FreeIPA/**  
+  Contiene los archivos de configuración para la integración de SecureHub con FreeIPA para la gestión de usuarios y autenticación.
 
-- **securehubfront-service.yaml**  
-  Archivo de configuración del **servicio** asociado al frontend de SecureHub, que expone el frontend en Kubernetes y permite su acceso dentro del clúster o, si está configurado, hacia el exterior.
+- **Keycloak/**  
+  Contiene los archivos de configuración de Keycloak, el servicio de autenticación centralizado que gestiona el inicio de sesión en SecureHub.
+
+- **LICENSE**  
+  Archivo con la licencia del proyecto.
+
+- **README.md**  
+  Este documento con información sobre el despliegue de SecureHub.
+
+---
 
 ## Instrucciones para el Despliegue
 
-1. **Instalación de Helm**: Asegúrate de tener Helm instalado en tu sistema.
-2. **Configurar el Chart de Helm**: Revisa y ajusta los valores en el archivo `values.yaml` dentro del chart para personalizar los recursos y configuraciones.
-3. **Aplicar los Recursos en Kubernetes**:
-   - Aplica los archivos `securehubback-deployment.yaml` y `securehubback-service.yaml` para desplegar y exponer el backend.
-   - Aplica los archivos `securehubfront-deployment.yaml` y `securehubfront-service.yaml` para desplegar y exponer el frontend.
-4. **Monitoreo y Gestión**: Utiliza los comandos de Helm para monitorear y actualizar el despliegue según sea necesario.
+### 1. Configuración del Entorno Kubernetes
 
-Este repositorio está diseñado para facilitar el despliegue modular de los componentes de SecureHub en Kubernetes, proporcionando una estructura clara para la administración de ambos servicios (frontend y backend) con Helm.
+Asegúrate de tener un clúster de Kubernetes configurado y accesible desde tu sistema.
 
+---
+
+### 2. Despliegue de los Componentes
+
+Ejecuta los siguientes pasos para desplegar cada componente de SecureHub:
+
+- **Backend**  
+  Aplica los archivos de despliegue y servicio del backend usando:  
+  ```bash
+  kubectl apply -f Backend/
+  ```
+- **Frontend**
+  Aplica los archivos de despliegue y servicio del frontend usando:
+  ```bash
+  kubectl apply -f Frontend/
+  ```
+- **FreeIPA**
+  Despliega FreeIPA para la gestión de usuarios y autenticación usando los archivos en:
+  ```bash
+  kubectl apply -f FreeIPA/
+  ```
+- **Keycloak**
+  Despliega Keycloak, configurado para autenticarse con FreeIPA mediante LDAP, usando los archivos en:
+  ```bash
+  kubectl apply -f Keycloak/
+  ```
+  
+### 3. Monitoreo y Gestión
+
+Utiliza los comandos de kubectl para monitorear, actualizar y gestionar los despliegues según sea necesario, por ejemplo:
+```bash
+kubectl get pods
+kubectl get services
+kubectl logs <nombre-del-pod>
+```
 
