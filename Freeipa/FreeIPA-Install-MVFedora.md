@@ -296,18 +296,23 @@ sudo firewall-cmd --permanent --add-service=freeipa-kerberos
 sudo firewall-cmd --permanent --add-service=ntp
 sudo firewall-cmd --reload
 ```
+
 ### 3.4 Ejecutar el instalador del cliente FreeIPA
 
 Después del reinicio, ejecuta el siguiente comando para iniciar la configuración del cliente:
+
 ```bash
 sudo ipa-client-install --mkhomedir
 ```
+
 Durante el proceso, responde a las preguntas de la siguiente manera:
+
 ```bash
 Dominio del servidor IPA: scrap.strast.es
 Nombre del servidor IPA: freeipa.scrap.strast.es
 ```
 ### 3.5 Trazas tras ejecutar la instalación
+
 ```bash
 This program will set up IPA client.
 Version 4.11.1
