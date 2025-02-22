@@ -115,7 +115,7 @@ spec:
               mountPath: /run/systemd
             - name: tmp
               mountPath: /tmp
-      hostname: freeipa.andion.eu
+      hostname: freeipa.com31-38.dit.upm.es
       volumes:
         - name: ipa-data
           persistentVolumeClaim:

@@ -13,8 +13,8 @@ data:
     cp /tmp/ipa-server-options /data/ipa-server-install-options
 
   ipa-server-options: |-
-    --realm=ANDION.EU
-    --domain=andion.eu
+    --realm=com31-38.dit.upm.es
+    --domain=com31-38.dit.upm.es
     --admin-password=${IPA_ADMIN_PASSWORD}
     --ds-password=${IPA_DIRECTORY_PASSWORD}
     --skip-mem-check
