@@ -20,3 +20,6 @@ data:
     --skip-mem-check
     --unattended
     --no-ntp
+    --setup-dns
+    --forwarder=138.4.2.10
+    --forwarder=138.4.2.32
