@@ -13,7 +13,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
   hostPath:
-    path: /mnt/freeipa-data
+    path: /mnt/freeipa-data2
 
 ---
 
