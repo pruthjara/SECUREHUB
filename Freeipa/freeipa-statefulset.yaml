@@ -32,6 +32,21 @@ spec:
           command:
             - sh
             - /tmp/startup.sh
+          env:
+            - name: TZ
+              value: "Europe/Madrid"
+            - name: IPA_SERVER_HOSTNAME
+              value: "freeipa.andion.eu"
+            - name: IPA_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: freeipa-secret
+                  key: admin-password
+            - name: IPA_DIRECTORY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: freeipa-secret
+                  key: directory-password
           volumeMounts:
             - name: ipa-data
               mountPath: /data
