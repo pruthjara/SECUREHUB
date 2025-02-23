@@ -4,29 +4,66 @@ metadata:
   name: freeipa-service
   namespace: securehub
   annotations:
-    metallb.universe.tf/address-pool: "primary"
-    metallb.universe.tf/allow-shared-ip: "true"
+    metallb.universe.tf/address-pool: "primary"  # MetalLB asigna la IP pública
+    metallb.universe.tf/allow-shared-ip: "true"  # Permite compartir la IP con otros servicios
 spec:
+  type: LoadBalancer
   selector:
     app: freeipa
   ports:
+    # HTTP y HTTPS
     - name: http
       port: 8081
       targetPort: 80
+      protocol: TCP
     - name: https
       port: 4433
       targetPort: 443
+      protocol: TCP
+
+    # LDAP y LDAPS
     - name: ldap
       port: 3899
       targetPort: 389
+      protocol: TCP
     - name: ldaps
       port: 3636
       targetPort: 636
-    - name: kerberos
+      protocol: TCP
+
+    # Kerberos (TCP y UDP)
+    - name: kerberos-tcp
       port: 3388
       targetPort: 88
-    - name: kpasswd
+      protocol: TCP
+    - name: kerberos-udp
+      port: 3388
+      targetPort: 88
+      protocol: UDP
+
+    # Kerberos Kpasswd (TCP y UDP)
+    - name: kpasswd-tcp
       port: 3464
       targetPort: 464
-  type: LoadBalancer
+      protocol: TCP
+    - name: kpasswd-udp
+      port: 3464
+      targetPort: 464
+      protocol: UDP
+
+    # DNS (TCP y UDP)
+    - name: dns-tcp
+      port: 533
+      targetPort: 53
+      protocol: TCP
+    - name: dns-udp
+      port: 533
+      targetPort: 53
+      protocol: UDP
+
+    # NTP (UDP)
+    - name: ntp
+      port: 1233
+      targetPort: 123
+      protocol: UDP
 
