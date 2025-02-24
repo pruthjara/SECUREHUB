@@ -23,6 +23,6 @@ data:
     --setup-dns
     --forwarder=138.4.2.10
     --forwarder=138.4.2.32
-    # --no-dnssec-validation
-    # --forward-policy=only 
-    # --allow-zone-overlap
+    --no-dnssec-validation
+    --forward-policy=only 
+    --allow-zone-overlap
