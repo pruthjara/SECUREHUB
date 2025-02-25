@@ -11,59 +11,60 @@ spec:
   selector:
     app: freeipa
   ports:
+    # DNS (TCP y UDP)
+    - name: dns-tcp
+      port: 53
+      targetPort: 53
+      protocol: TCP
+    - name: dns-udp
+      port: 53
+      targetPort: 53
+      protocol: UDP
+
     # HTTP y HTTPS
     - name: http
-      port: 8081
+      port: 80
       targetPort: 80
       protocol: TCP
     - name: https
-      port: 4433
+      port: 443
       targetPort: 443
       protocol: TCP
 
-    # LDAP y LDAPS
+    # LDAP (TCP)
     - name: ldap
-      port: 3899
+      port: 389
       targetPort: 389
       protocol: TCP
     - name: ldaps
-      port: 3636
+      port: 636
       targetPort: 636
       protocol: TCP
 
     # Kerberos (TCP y UDP)
     - name: kerberos-tcp
-      port: 3388
+      port: 88
       targetPort: 88
       protocol: TCP
     - name: kerberos-udp
-      port: 3388
+      port: 88
       targetPort: 88
       protocol: UDP
 
-    # Kerberos Kpasswd (TCP y UDP)
+    # Kerberos Password Change (TCP y UDP)
     - name: kpasswd-tcp
-      port: 3464
+      port: 464
       targetPort: 464
       protocol: TCP
     - name: kpasswd-udp
-      port: 3464
+      port: 464
       targetPort: 464
-      protocol: UDP
-
-    # DNS (TCP y UDP)
-    - name: dns-tcp
-      port: 533
-      targetPort: 53
-      protocol: TCP
-    - name: dns-udp
-      port: 533
-      targetPort: 53
       protocol: UDP
 
     # NTP (UDP)
     - name: ntp
-      port: 1233
+      port: 123
       targetPort: 123
       protocol: UDP
+
 
