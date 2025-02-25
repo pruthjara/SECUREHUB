@@ -30,7 +30,7 @@ spec:
         lifecycle:
           postStart:
             exec:
-              command: ["/bin/sh", "-c", "kinit -k -t /etc/admin.keytab newadmin"]
+              command: ["/bin/sh", "-c", "kinit -k -t /etc/admin.keytab admin"]
       volumes:
       - name: keytab-volume
         secret:
