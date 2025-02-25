@@ -6,7 +6,7 @@ metadata:
 data:
   krb5.conf: |
     [libdefaults]
-        default_realm = SCRAP.STRAST.ES
+        default_realm = ANDION.EU
         dns_lookup_realm = false
         dns_lookup_kdc = true
         ticket_lifetime = 24h
@@ -14,10 +14,10 @@ data:
 
     [realms]
         SCRAP.STRAST.ES = {
-            kdc = freeipa.scrap.strast.es
-            admin_server = freeipa.scrap.strast.es
+            kdc = freeipa.andion.eu
+            admin_server = freeipa.andion.eu
         }
 
     [domain_realm]
-        .scrap.strast.es = SCRAP.STRAST.ES
-        scrap.strast.es = SCRAP.STRAST.ES
+        .scrap.strast.es = ANDION.EU
+        scrap.strast.es = ANDION.EU
