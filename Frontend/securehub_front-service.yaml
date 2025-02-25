@@ -3,11 +3,14 @@ kind: Service
 metadata:
   name: frontend-service
   namespace: securehub
+  annotations:
+    metallb.universe.tf/address-pool: "primary"
+    metallb.universe.tf/allow-shared-ip: "true"
 spec:
   selector:
     app: frontend
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 3030
+      targetPort: 3030
   type: LoadBalancer
