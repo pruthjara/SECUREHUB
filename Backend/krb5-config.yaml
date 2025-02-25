@@ -14,8 +14,8 @@ data:
 
     [realms]
         ANDION.EU = {
-            kdc = freeipa.andion.eu
-            admin_server = freeipa.andion.eu
+            kdc = freeipa.andion.eu:433
+            admin_server = freeipa.andion.eu:433
         }
 
     [domain_realm]
