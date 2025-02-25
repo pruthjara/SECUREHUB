@@ -13,11 +13,11 @@ data:
         forwardable = true
 
     [realms]
-        SCRAP.STRAST.ES = {
+        ANDION.EU = {
             kdc = freeipa.andion.eu
             admin_server = freeipa.andion.eu
         }
 
     [domain_realm]
-        .scrap.strast.es = ANDION.EU
-        scrap.strast.es = ANDION.EU
+        .andion.eu = ANDION.EU
+        andion.eu = ANDION.EU
