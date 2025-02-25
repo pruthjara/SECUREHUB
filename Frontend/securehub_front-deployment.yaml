@@ -17,7 +17,7 @@ spec:
       - name: frontend
         image: ghcr.io/strast-upm/securehub_frontend:latest 
         ports:
-        - containerPort: 3000
+        - containerPort: 3030
         env:
         - name: REACT_APP_BACKEND_URL
           value: "http://backend-service:9000"
