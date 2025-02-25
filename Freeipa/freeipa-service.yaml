@@ -7,7 +7,7 @@ metadata:
     metallb.universe.tf/address-pool: "primary"  # MetalLB asigna la IP pública
     metallb.universe.tf/allow-shared-ip: "true"  # Permite compartir la IP con otros servicios
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: freeipa
   ports:
@@ -66,5 +66,4 @@ spec:
       port: 123
       targetPort: 123
       protocol: UDP
-
 
