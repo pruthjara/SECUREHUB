@@ -13,16 +13,15 @@ data:
     cp /tmp/ipa-server-options /data/ipa-server-install-options
 
   ipa-server-options: |-
-    --realm=com31-38.dit.upm.es
-    --domain=com31-38.dit.upm.es
-    --admin-password=${IPA_ADMIN_PASSWORD}
-    --ds-password=${IPA_DIRECTORY_PASSWORD}
+    --realm=ANDION.EU
+    --domain=andion.eu
+    --admin-password=Admin123!
+    --ds-password=Direc123!
     --skip-mem-check
     --unattended
     --no-ntp
     --setup-dns
-    --forwarder=138.4.2.10
-    --forwarder=138.4.2.32
+    --forwarder=1.1.1.1
     --no-dnssec-validation
-    --forward-policy=only 
+    --forward-policy=only
     --allow-zone-overlap
