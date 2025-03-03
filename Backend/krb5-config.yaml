@@ -8,14 +8,14 @@ data:
     [libdefaults]
         default_realm = ANDION.EU
         dns_lookup_realm = false
-        dns_lookup_kdc = true
+        dns_lookup_kdc = false
         ticket_lifetime = 24h
         forwardable = true
 
     [realms]
         ANDION.EU = {
-            kdc = freeipa.andion.eu:433
-            admin_server = freeipa.andion.eu:433
+            kdc = freeipa.andion.eu
+            admin_server = freeipa.andion.eu
         }
 
     [domain_realm]
