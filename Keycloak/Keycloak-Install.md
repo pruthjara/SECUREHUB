@@ -106,32 +106,55 @@ Guarda los cambios.
 ## 3. Configuración de Keycloak con LDAP de FreeIPA
 
 ### 3.1. Añadir FreeIPA como Proveedor de Usuarios
-Ve a Keycloak → Proveedores de Usuarios.
+Ve a Keycloak → User federation.
 
 Haz clic en Agregar Proveedor y elige LDAP.
 
-Configura:
+#### Configuración de la conexión LDAP con FreeIPA
 - Nombre: freeipa-ldap
-- Ednpoint LDAP: ldap://freeipa-service:389
-- DN Base: dc=securehub,dc=com
-- DN de Administración: uid=admin,cn=users,cn=accounts,dc=securehub,dc=com
+- Proveedor: Active Directory
+- Endpoint LDAP: ldap://freeipa.andion.eu
+- Habilitar StartTLS: No
+- Tipo de autenticación: Simple
+- Bind DN: uid=admin,cn=users,cn=accounts,dc=andion,dc=eu
 - Contraseña: (la de FreeIPA)
-- Modo de sincronización: PERIODIC
-  
-Guarda y haz clic en Sincronizar Usuarios.
-### 3.2. Configurar Atributos de Usuario
-En el proveedor LDAP, ve a Mappers.
 
-Agrega:
-- uid → username
-- mail → email
-- cn → full name
-  
-Guarda los cambios.
+#### Configuración de búsqueda y actualización en LDAP
+- Modo de edición: READ_ONLY
+- Users DN: cn=users,cn=accounts,dc=andion,dc=eu
+- Atributo LDAP del nombre de usuario: (según la configuración de FreeIPA)
+- Atributo LDAP del RDN: (según la configuración de FreeIPA)
+- Atributo UUID LDAP: (según la configuración de FreeIPA)
+- Clases de objeto del usuario: (según la configuración de FreeIPA)
+- Filtro de búsqueda de usuario: (opcional)
+- Ámbito de búsqueda: One Level
+- Habilitar paginación: Sí
+- Referencias LDAP: Ignorar
+
+#### Configuración de sincronización
+- Importación de usuarios: Activada
+- Sincronización de registros: Activada
+- Tamaño de lote: (valor predeterminado o ajustado según necesidades)
+- Sincronización periódica completa: Activada
+- Frecuencia de sincronización completa: (definir el tiempo)
+- Sincronización periódica de cambios: Activada
+- Frecuencia de sincronización de cambios: (definir el tiempo)
+- Integración con Kerberos
+- Permitir autenticación Kerberos: No
+- Usar Kerberos para autenticación de contraseña: No
+
+#### Configuración de caché
+- Política de caché: DEFAULT
+- Configuración avanzada
+- Habilitar operación extendida de modificación de contraseña LDAPv3: No
+- Validar políticas de contraseña: No
+- Confiar en el correo electrónico: No
+- Rastreo de conexión: No
+- Consultar extensiones soportadas: (según necesidades)
+
 ### 3.3. Habilitar Inicio de Sesión con LDAP
-Ve a Autenticación → Flows.
 
-Edita el flujo de autenticación e inserta LDAP Login.
+Ve a User federation  → freeipa-ldap  → Actions (Desplegable arriba a la derecha) → Sync All Users
 
 Prueba iniciar sesión con un usuario de FreeIPA.
 
