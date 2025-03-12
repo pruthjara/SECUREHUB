@@ -97,9 +97,9 @@ Accede a Clientes → Crear Cliente.
 Configura los siguientes valores:
 - ID del Cliente: securehub-frontend
 - Tipo de Acceso: Public
-- Root URL: http://frontend-service:3000
-- Valid Redirect URIs: http://frontend-service:3000/*
-- Web Origins: http://frontend-service:3000
+- Root URL: http://frontend-service:3030
+- Valid Redirect URIs: http://frontend-service:3030/*
+- Web Origins: http://frontend-service:3030
   
 Guarda los cambios.
 
