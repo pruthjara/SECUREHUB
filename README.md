@@ -65,4 +65,6 @@ kubectl get pods
 kubectl get services
 kubectl logs <nombre-del-pod>
 ```
-
+### Links
+   Securehub Frontend: http://138.4.11.249:3030
+   FreeIPA API: https://freeipa.andion.eu/ipa/ui/
