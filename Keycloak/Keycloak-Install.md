@@ -87,7 +87,7 @@ Ve a Clientes → Crear Cliente.
 Configura los siguientes valores:
 - ID del Cliente: securehub-backend
 - Tipo de Acceso: Confidential
-- Root URL: http://backend-service:9000
+- Root URL: http://backend-service:9000 (usar IP externa, no nombre del servicio)
 
 Guarda los cambios y en la pestaña Credenciales, copia el client-secret.
 ### 2.2. Crear un Cliente para el Frontend
@@ -97,9 +97,9 @@ Accede a Clientes → Crear Cliente.
 Configura los siguientes valores:
 - ID del Cliente: securehub-frontend
 - Tipo de Acceso: Public
-- Root URL: http://frontend-service:3030
-- Valid Redirect URIs: http://frontend-service:3030/*
-- Web Origins: http://frontend-service:3030
+- Root URL: http://frontend-service:3030 (usar IP externa, no nombre del servicio)
+- Valid Redirect URIs: http://frontend-service:3030/* (usar IP externa, no nombre del servicio)
+- Web Origins: http://frontend-service:3030 (usar IP externa, no nombre del servicio)
   
 Guarda los cambios.
 
@@ -122,10 +122,10 @@ Haz clic en Agregar Proveedor y elige LDAP.
 #### Configuración de búsqueda y actualización en LDAP
 - Modo de edición: READ_ONLY
 - Users DN: cn=users,cn=accounts,dc=andion,dc=eu
-- Atributo LDAP del nombre de usuario: (según la configuración de FreeIPA)
-- Atributo LDAP del RDN: (según la configuración de FreeIPA)
-- Atributo UUID LDAP: (según la configuración de FreeIPA)
-- Clases de objeto del usuario: (según la configuración de FreeIPA)
+- Atributo LDAP del nombre de usuario: uid
+- Atributo LDAP del RDN: uid
+- Atributo UUID LDAP: ipaUniqueID
+- Clases de objeto del usuario: person, organizationalperson, top, inetorgperson
 - Filtro de búsqueda de usuario: (opcional)
 - Ámbito de búsqueda: One Level
 - Habilitar paginación: Sí
