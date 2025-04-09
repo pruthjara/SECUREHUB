@@ -1,4 +1,4 @@
-# Despliegue de FreeIPA en Kubernetes
+## Despliegue de FreeIPA en Kubernetes
 
 Para desplegar correctamente FreeIPA en un entorno Kubernetes, es necesario aplicar los siguientes archivos de configuración:
 
