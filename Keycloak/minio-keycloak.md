@@ -4,7 +4,7 @@ Este documento describe cómo integrar MinIO con Keycloak usando OpenID Connect 
 
 ---
 
-## 🧾 Requisitos previos
+## Requisitos previos
 
 - Keycloak desplegado y conectado a FreeIPA como proveedor LDAP (User Federation)
 - MinIO configurado para autenticarse con Keycloak (OIDC)
