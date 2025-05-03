@@ -39,9 +39,9 @@ Completar con los siguientes valores:
 | **Mapper Type**             | `user-attribute-ldap-mapper`|
 | **User Model Attribute**    | `policy`                    |
 | **LDAP Attribute**          | `employeeType`              |
-| **Read Only**               | On                          |
-| **Always Read Value From LDAP** |   (On)                |
-| **Is Mandatory In LDAP**    |   (Off)                     |
+| **Read Only**               | ON                          |
+| **Always Read Value From LDAP** |   ON                  |
+| **Is Mandatory In LDAP**    |   OFF                       |
 
 Esto hace que el atributo `employeeType` en FreeIPA se guarde como `policy` en los usuarios federados en Keycloak.
 
