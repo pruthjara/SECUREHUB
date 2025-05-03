@@ -4,6 +4,7 @@ metadata:
   name: keycloak-ingress
   namespace: securehub
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   tls:
