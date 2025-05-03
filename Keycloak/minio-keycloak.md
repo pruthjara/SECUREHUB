@@ -39,9 +39,9 @@ Completar con los siguientes valores:
 | **Mapper Type**             | `user-attribute-ldap-mapper`|
 | **User Model Attribute**    | `policy`                    |
 | **LDAP Attribute**          | `employeeType`              |
-| **Read Only**               | ✅ (On)                      |
-| **Always Read Value From LDAP** | ✅ (On)                |
-| **Is Mandatory In LDAP**    | ❌ (Off)                     |
+| **Read Only**               | On                          |
+| **Always Read Value From LDAP** |   (On)                |
+| **Is Mandatory In LDAP**    |   (Off)                     |
 
 Esto hace que el atributo `employeeType` en FreeIPA se guarde como `policy` en los usuarios federados en Keycloak.
 
@@ -51,9 +51,9 @@ Ir a:
 `Client Scopes > Create`
 
 - **Name**: `minio-authorization`
-- **Include in token scope**: ✅ (Activado)
+- **Include in token scope**: Activado
 
-🔁 Guardar.
+Guardar.
 
 ---
 
@@ -70,10 +70,10 @@ Completar con los siguientes valores:
 | **Name**                | `minio-policy-mapper` |
 | **User Attribute**      | `policy`              |
 | **Token Claim Name**    | `policy`              |
-| **Add to ID Token**     | ✅                    |
-| **Add to Access Token** | ✅                    |
+| **Add to ID Token**     | ON                    |
+| **Add to Access Token** | ON                    |
 | **Claim JSON Type**     | `String`              |
-| **Multivalued**         | ✅                    |
+| **Multivalued**         | ON                    |
 
 ---
 
@@ -103,7 +103,7 @@ Copiar el `access_token`, ir a [https://jwt.io](https://jwt.io) y verificar que 
 "policy": "consoleAdmin"
 ```
 
-## ✅ Resultado esperado
+## Resultado esperado
 
 Una vez el claim `policy` está presente en el token, MinIO lo utilizará para autorizar al usuario usando sus políticas definidas (como `consoleAdmin`), y el login funcionará sin errores como: "Policy claim missing from the JWT token"
 
