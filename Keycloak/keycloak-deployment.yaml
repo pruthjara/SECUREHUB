@@ -14,13 +14,29 @@ spec:
         app: keycloak
     spec:
       containers:
-      - name: keycloak
-        image: quay.io/keycloak/keycloak:latest
-        args: ["start-dev"]
-        ports:
-          - containerPort: 8080
-        env:
-          - name: KEYCLOAK_ADMIN
-            value: "admin"
-          - name: KEYCLOAK_ADMIN_PASSWORD
-            value: "admin123"
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:latest
+          args: ["start-dev"]
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: admin
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: admin123
+            - name: KC_PROXY
+              value: edge
+            - name: KC_HOSTNAME
+              value: keycloak.andion.eu
+            - name: KC_HTTPS_CERTIFICATE_FILE
+              value: /etc/x509/https/tls.crt
+            - name: KC_HTTPS_CERTIFICATE_KEY_FILE
+              value: /etc/x509/https/tls.key
+          ports:
+            - containerPort: 8443
+          volumeMounts:
+            - name: https-cert
+              mountPath: /etc/x509/https
+              readOnly: true
+      volumes:
+        - name: https-cert
+          secret:
+            secretName: keycloak-secret-https
