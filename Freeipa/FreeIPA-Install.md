@@ -91,4 +91,25 @@ Si el cliente ya estaba instalado y deseas hacer una reinstalación limpia, pued
   sudo rm -rf /etc/sssd /var/lib/sss /var/log/sssd
   sudo rm -f /etc/krb5.conf /var/lib/krb5kdc
   ```
+## Restablecer contraseña de un usuario en FreeIPA
+
+En caso de que necesites restablecer la contraseña de un usuario directamente desde el servidor FreeIPA, puedes hacerlo utilizando la herramienta `kadmin.local`, que permite gestionar la base de datos de Kerberos localmente sin necesidad de autenticarse.
+
+### Pasos para restablecer la contraseña:
+
+1. Accede al pod de FreeIPA:
+   ```bash
+   kubectl exec -it freeipa-0 -- bash
+   ```
+2. Inicia la consola administrativa de Kerberos:
+   ```bash
+   sudo kadmin.local
+   ```
+3. Una vez dentro, ejecuta el siguiente comando para cambiar la contraseña del usuario deseado:
+   ```bash
+   kadmin.local: cpw <nombre-de-usuario>
+   ```
+   Se te pedirá que introduzcas la nueva contraseña.
+
+**Este método es útil para realizar cambios urgentes sin depender de la interfaz web de FreeIPA.**
 
