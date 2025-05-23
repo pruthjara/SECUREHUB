@@ -56,19 +56,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: keycloak-service
+  name: keycloak
   namespace: securehub
-  annotations:
-    metallb.universe.tf/address-pool: "primary"
-    metallb.universe.tf/allow-shared-ip: "true"
 spec:
+  ports:
+    - name: https
+      port: 443
+      targetPort: 8443
   selector:
     app: keycloak
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
-  type: LoadBalancer
 ```
 ### 1.2. Aplicar la configuración en el clúster
 Ejecuta el siguiente comando para desplegar Keycloak:
